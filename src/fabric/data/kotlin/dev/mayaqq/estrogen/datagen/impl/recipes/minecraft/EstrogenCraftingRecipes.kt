@@ -105,5 +105,13 @@ class EstrogenCraftingRecipes(output: FabricDataOutput, lookup: CompletableFutur
             .pattern("FFF")
             .unlockedBy(getHasName(Items.COBWEB), has(Items.COBWEB))
             .save(output)
+        ShapelessRecipeBuilder.shapeless(RecipeCategory.BREWING, EstrogenItems.SugarGoop.value!!,1)
+            .requires(Items.SUGAR,1)
+            .requires(Items.BEETROOT,2)
+            .requires(Items.WHEAT,2)
+            .unlockedBy(getHasName(Items.SUGAR),has(Items.SUGAR))
+            .unlockedBy(getHasName(Items.BEETROOT),has(Items.BEETROOT))
+            .unlockedBy(getHasName(Items.WHEAT),has(Items.WHEAT))
+            .save(output)
     }
 }

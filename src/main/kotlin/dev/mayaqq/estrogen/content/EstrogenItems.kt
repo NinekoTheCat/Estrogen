@@ -167,6 +167,13 @@ object EstrogenItems : Registrar<Item> by Registrar(MOD_ID, Registries.ITEM) {
         creativeTab(CreativeModeTabs.FOOD_AND_DRINKS, TabPlacement.AFTER(Items.HONEY_BOTTLE))
     }
 
+    val SugarGoop = item("sugar_goop",::Item){
+        properties {
+            stacksTo(16)
+        }
+        creativeTab(CreativeModeTabs.INGREDIENTS)
+    }
+
     lateinit var DreamBottle: DreamBottleItem
         internal set
 
