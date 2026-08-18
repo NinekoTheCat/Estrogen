@@ -4,6 +4,7 @@ import dev.mayaqq.estrogen.datagen.api.EstrogenDatagenEntrypoint
 import dev.mayaqq.estrogen.datagen.api.EstrogenPack
 import dev.mayaqq.estrogen.datagen.impl.advancements.EstrogenAdvancements
 import dev.mayaqq.estrogen.datagen.impl.loottables.EstrogenLoottables
+import dev.mayaqq.estrogen.datagen.impl.models.EstrogenModels
 import dev.mayaqq.estrogen.datagen.impl.recipes.minecraft.EstrogenCraftingRecipes
 import dev.mayaqq.estrogen.datagen.impl.tags.EstrogenBlockTags
 import dev.mayaqq.estrogen.datagen.impl.tags.EstrogenEntityTags
@@ -14,6 +15,7 @@ import dev.mayaqq.estrogen.datagen.impl.translations.EstrogenTranslations
 object EstrogenDatagen : EstrogenDatagenEntrypoint("estrogen") {
     override fun setupCommon(pack: EstrogenPack) {
         //TODO: pack.addProvider(::EstrogenEntityInteractionRecipes);
+        pack.addProvider(::EstrogenModels)
         pack.addProvider(::EstrogenBlockTags)
         pack.addProvider(::EstrogenEntityTags)
         pack.addProvider(::EstrogenItemTags)

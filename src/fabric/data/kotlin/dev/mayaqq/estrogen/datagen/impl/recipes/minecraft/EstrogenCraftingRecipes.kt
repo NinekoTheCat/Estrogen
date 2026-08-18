@@ -1,9 +1,11 @@
 package dev.mayaqq.estrogen.datagen.impl.recipes.minecraft
 
 import dev.mayaqq.estrogen.content.EstrogenBlocks
+import dev.mayaqq.estrogen.content.EstrogenFluids
 import dev.mayaqq.estrogen.content.EstrogenItems
 import dev.mayaqq.estrogen.content.recipes.DreamCatcherDyeRecipe
 import dev.mayaqq.estrogen.content.recipes.ThighHighDyeRecipe
+import dev.mayaqq.estrogen.content.recipes.datagen.SpongingRecipeBuilder
 import dev.mayaqq.estrogen.datagen.api.platform.PlatformRecipeHelper
 import dev.mayaqq.estrogen.id
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
@@ -112,6 +114,14 @@ class EstrogenCraftingRecipes(output: FabricDataOutput, lookup: CompletableFutur
             .unlockedBy(getHasName(Items.SUGAR),has(Items.SUGAR))
             .unlockedBy(getHasName(Items.BEETROOT),has(Items.BEETROOT))
             .unlockedBy(getHasName(Items.WHEAT),has(Items.WHEAT))
+            .save(output)
+        SpongingRecipeBuilder().setInput(EstrogenFluids.SugarySyrup.get())
+            .setOutput(EstrogenFluids.FilteredSugarySyrups[0].get())
+            .save(output)
+
+        SpongingRecipeBuilder()
+            .setInput(EstrogenFluids.FilteredSugarySyrups[0].get())
+            .setOutput(EstrogenFluids.FilteredSugarySyrups[1].get())
             .save(output)
     }
 }

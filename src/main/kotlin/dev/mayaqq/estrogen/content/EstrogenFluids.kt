@@ -8,7 +8,6 @@ import com.teamresourceful.resourcefullib.common.fluid.ResourcefulFlowingFluid
 import com.teamresourceful.resourcefullib.common.fluid.registry.ResourcefulFluidRegistry
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistries
 import com.teamresourceful.resourcefullib.common.registry.ResourcefulRegistryType
-import dev.mayaqq.estrogen.Estrogen
 import dev.mayaqq.estrogen.MOD_ID
 import dev.mayaqq.estrogen.content.blocks.fluid.BaseEstrogenLiquidBlock
 import dev.mayaqq.estrogen.content.blocks.fluid.EstrogenLiquidBlock
@@ -21,7 +20,6 @@ import invoke.kitty.kritter.registry.api.Registrar
 import net.minecraft.client.renderer.RenderType
 import net.minecraft.core.registries.Registries
 import net.minecraft.tags.FluidTags
-import net.minecraft.util.FastColor
 import net.minecraft.world.item.Items
 import net.minecraft.world.item.Rarity
 import net.minecraft.world.level.block.Blocks
@@ -32,47 +30,51 @@ import net.minecraft.world.level.material.MapColor
 @Suppress("UnstableApiUsage")
 object EstrogenFluids : Registrar<Fluid> by Registrar(MOD_ID, Registries.FLUID), FluidRegistryProvider {
 
-    override val fluidRegistry: ResourcefulFluidRegistry = ResourcefulRegistries.create(ResourcefulRegistryType.FLUID, MOD_ID)
+    override val fluidRegistry: ResourcefulFluidRegistry =
+        ResourcefulRegistries.create(ResourcefulRegistryType.FLUID, MOD_ID)
     override val clientFluidRegistry: ResourcefulClientFluidRegistry = ResourcefulClientFluidRegistry(MOD_ID)
 
     val LiquidEstrogen = fluid("liquid_estrogen", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
-            properties {
-                canConvertToSource(false)
-                canDrown(true)
-                canExtinguish(true)
-                canPushEntity(true)
-                canSwim(true)
-                viscosity(1500)
-                density(1500)
-                canHydrate(false)
-            }
-            clientProperties {
-                still(id("block/liquid_estrogen/liquid_estrogen_still"))
-                flowing(id("block/liquid_estrogen/liquid_estrogen_flow"))
-                screenOverlay(mcid("textures/misc/underwater.png"))
-            }
-            renderType { RenderType.translucent() }
-            block({ data, properties -> EstrogenLiquidBlock(data, properties,
+        properties {
+            canConvertToSource(false)
+            canDrown(true)
+            canExtinguish(true)
+            canPushEntity(true)
+            canSwim(true)
+            viscosity(1500)
+            density(1500)
+            canHydrate(false)
+        }
+        clientProperties {
+            still(id("block/liquid_estrogen/liquid_estrogen_still"))
+            flowing(id("block/liquid_estrogen/liquid_estrogen_flow"))
+            screenOverlay(mcid("textures/misc/underwater.png"))
+        }
+        renderType { RenderType.translucent() }
+        block({ data, properties ->
+            EstrogenLiquidBlock(
+                data, properties,
                 arrayOf(BaseEstrogenLiquidBlock.FluidInteraction { pos, state, fluidState ->
                     if (fluidState.`is`(Fluids.WATER)) {
                         return@FluidInteraction Blocks.CALCITE.defaultBlockState()
                     }
                     return@FluidInteraction null
                 })
-            )}) {
-                initialPropertiesFrom(Blocks::WATER)
-                properties {
-                    mapColor(MapColor.COLOR_CYAN)
-                }
-            }
-            bucket(::ResourcefulBucketItem) {
-                properties {
-                    craftRemainder(Items.BUCKET)
-                    stacksTo(1)
-                    rarity(Rarity.RARE)
-                }
+            )
+        }) {
+            initialPropertiesFrom(Blocks::WATER)
+            properties {
+                mapColor(MapColor.COLOR_CYAN)
             }
         }
+        bucket(::ResourcefulBucketItem) {
+            properties {
+                craftRemainder(Items.BUCKET)
+                stacksTo(1)
+                rarity(Rarity.RARE)
+            }
+        }
+    }
     val MoltenSlime = fluid("molten_slime", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
         lavaLike(MapColor.COLOR_LIGHT_GREEN, EstrogenColors.MOLTEN_SLIME.toInt())
         simpleBucket()
@@ -81,14 +83,16 @@ object EstrogenFluids : Registrar<Fluid> by Registrar(MOD_ID, Registries.FLUID),
         lavaLike(MapColor.COLOR_PURPLE, EstrogenColors.MOLTEN_AMETHYST.toInt())
         simpleBucket()
     }
-    val TestosteroneMixture = fluid("testosterone_mixture", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
-        waterLike(MapColor.TERRACOTTA_YELLOW, EstrogenColors.TESTOSTERONE_MIXTURE.toInt())
-        simpleBucket()
-    }
-    val FiltratedHorseUrine = fluid("filtrated_horse_urine", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
-        waterLike(MapColor.TERRACOTTA_YELLOW, EstrogenColors.FILTRATED_HORSE_URINE.toInt())
-        simpleBucket()
-    }
+    val TestosteroneMixture =
+        fluid("testosterone_mixture", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
+            waterLike(MapColor.TERRACOTTA_YELLOW, EstrogenColors.TESTOSTERONE_MIXTURE.toInt())
+            simpleBucket()
+        }
+    val FiltratedHorseUrine =
+        fluid("filtrated_horse_urine", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
+            waterLike(MapColor.TERRACOTTA_YELLOW, EstrogenColors.FILTRATED_HORSE_URINE.toInt())
+            simpleBucket()
+        }
     val HorseUrine = fluid("horse_urine", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
         waterLike(MapColor.COLOR_YELLOW, EstrogenColors.HORSE_URINE.toInt())
         simpleBucket()
@@ -110,14 +114,17 @@ object EstrogenFluids : Registrar<Fluid> by Registrar(MOD_ID, Registries.FLUID),
             screenOverlay(mcid("textures/misc/underwater.png"))
         }
         renderType { RenderType.translucent() }
-        block({ data, properties -> EstrogenLiquidBlock(data, properties,
-            arrayOf(BaseEstrogenLiquidBlock.FluidInteraction { pos, state, fluidState ->
-                if (fluidState.`is`(FluidTags.LAVA)) {
-                    return@FluidInteraction Blocks.PRISMARINE.defaultBlockState()
-                }
-                return@FluidInteraction null
-            })
-        )}) {
+        block({ data, properties ->
+            EstrogenLiquidBlock(
+                data, properties,
+                arrayOf(BaseEstrogenLiquidBlock.FluidInteraction { pos, state, fluidState ->
+                    if (fluidState.`is`(FluidTags.LAVA)) {
+                        return@FluidInteraction Blocks.PRISMARINE.defaultBlockState()
+                    }
+                    return@FluidInteraction null
+                })
+            )
+        }) {
             initialPropertiesFrom(Blocks::WATER)
             properties {
                 mapColor(MapColor.COLOR_PURPLE)
@@ -132,4 +139,19 @@ object EstrogenFluids : Registrar<Fluid> by Registrar(MOD_ID, Registries.FLUID),
             }
         }
     }
+    val SugarySyrup = fluid("sugary_syrup", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
+        simpleBucket()
+        waterLike(MapColor.COLOR_LIGHT_GREEN,0xffaaff)
+
+    }
+    val FilteredSugarySyrups = arrayOf(fluid("sugary_syrup_filtered_1", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
+        simpleBucket()
+        waterLike(MapColor.COLOR_LIGHT_GREEN,0xffabff)
+
+    }, fluid("sugary_syrup_filtered_2", ResourcefulFlowingFluid::Still, ResourcefulFlowingFluid::Flowing) {
+            simpleBucket()
+            waterLike(MapColor.COLOR_LIGHT_GREEN,0xffddff)
+
+        })
+
 }
