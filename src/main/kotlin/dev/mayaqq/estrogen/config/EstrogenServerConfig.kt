@@ -6,6 +6,10 @@ import invoke.kitty.kritter.config.api.ConfigCategory
 import invoke.kitty.kritter.config.formats.Json5Format
 import invoke.kitty.kritter.config.validation.types.min
 import invoke.kitty.kritter.config.validation.types.range
+import invoke.kitty.kritter.utils.event.runAfterServerTicks
+import net.minecraft.client.Minecraft
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.commands.ReloadCommand
 
 object EstrogenServerConfig : Config("$MOD_ID/server", Json5Format.Default) {
 

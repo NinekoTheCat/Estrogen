@@ -3,6 +3,7 @@ package dev.mayaqq.estrogen.neoforge
 import dev.mayaqq.estrogen.content.EstrogenBlocks
 import dev.mayaqq.estrogen.content.EstrogenFluids
 import dev.mayaqq.estrogen.content.fluids.registry.EstrogenFluidEntry
+import dev.mayaqq.estrogen.neoforge.conditions.EstrogenConditions
 import invoke.kitty.kritter.platform.Mod
 import invoke.kitty.kritter.platform.forge.EntrypointHandler
 import invoke.kitty.kritter.platform.forge.eventBus
@@ -23,9 +24,10 @@ object EstrogenNeoForge {
             .let { field ->
                 field.get(EstrogenFluids.fluidRegistry) as DeferredRegister<FluidType>
             }.register(mod.eventBus)
-
+        EstrogenConditions.register()
         mod.eventBus.addListener(::registerCapabilities)
         mod.eventBus.addListener(::registerCauldrons)
+
     }
 
     fun registerCapabilities(event: RegisterCapabilitiesEvent) {

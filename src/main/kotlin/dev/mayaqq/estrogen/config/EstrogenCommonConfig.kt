@@ -42,4 +42,42 @@ object EstrogenCommonConfig : SyncedConfig("$MOD_ID/common", Json5Format.Default
         }
     }
 
+    object Experimental : ConfigCategory(comment = "Settings which trigger experimental features") {
+        object VeganEstrogen : ConfigCategory(comment = "Vegan Estrogen Settings") {
+            val enabled: Boolean by field(false) {
+                comment = "Enable/Disable vegan estrogen production chain, needs `/reload` to take effect."
+
+//            onChanged {
+//                if (lastValue == enableVeganEstrogen) {
+//                    return@onChanged
+//                }
+//                lastValue = enableVeganEstrogen
+//
+//                serverOnly {
+//                    runAfterServerTicks(0) {
+//                        if ((reloadingFuture?.isDone ?: true)) {
+//                            reloadingFuture = it.reloadResources(listOf("estrogen"))
+//                        }
+//
+//
+//                    }
+//                }
+//                clientOnly {
+//                    if ((reloadingFuture?.isDone ?: true)) {
+//                        reloadingFuture =
+//                            Minecraft.getInstance()?.singleplayerServer?.reloadResources(listOf("estrogen"))
+//                    }
+//                }
+//            }
+//
+//            }
+//        }
+                // fix? it bricks the save, the reload I mean
+            }
+        }
+
+    }
 }
+
+//private var lastValue = EstrogenCommonConfig.Experimental.enableVeganEstrogen
+//private var reloadingFuture : CompletableFuture<Void>?= null

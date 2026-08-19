@@ -6,17 +6,23 @@ import dev.mayaqq.estrogen.content.EstrogenItems
 import dev.mayaqq.estrogen.content.recipes.DreamCatcherDyeRecipe
 import dev.mayaqq.estrogen.content.recipes.ThighHighDyeRecipe
 import dev.mayaqq.estrogen.content.recipes.datagen.SpongingRecipeBuilder
+import dev.mayaqq.estrogen.datagen.api.platform.Platform
 import dev.mayaqq.estrogen.datagen.api.platform.PlatformRecipeHelper
+import dev.mayaqq.estrogen.fabric.datagen.FabricForgeConditionsMap
 import dev.mayaqq.estrogen.id
+import dev.mayaqq.estrogen.recipes.conditions.VeganEstrogenEnabledCondition
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider
+import net.minecraft.advancements.Advancement
+import net.minecraft.advancements.AdvancementHolder
 import net.minecraft.advancements.CriteriaTriggers
 import net.minecraft.advancements.critereon.ImpossibleTrigger
 import net.minecraft.core.HolderLookup
 import net.minecraft.data.recipes.*
-import net.minecraft.data.recipes.RecipeProvider.has
+import net.minecraft.resources.ResourceLocation
 import net.minecraft.tags.ItemTags
 import net.minecraft.world.item.Items
+import net.minecraft.world.item.crafting.Recipe
 import java.util.concurrent.CompletableFuture
 
 class EstrogenCraftingRecipes(output: FabricDataOutput, lookup: CompletableFuture<HolderLookup.Provider>, val helper: PlatformRecipeHelper) : FabricRecipeProvider(output, lookup) {
@@ -107,6 +113,29 @@ class EstrogenCraftingRecipes(output: FabricDataOutput, lookup: CompletableFutur
             .pattern("FFF")
             .unlockedBy(getHasName(Items.COBWEB), has(Items.COBWEB))
             .save(output)
+        fun veganConditionAdapter(output: RecipeOutput) : RecipeOutput{
+            when(helper.platform) {
+                Platform.FABRIC -> {
+                    return withConditions(output, VeganEstrogenEnabledCondition())
+                }
+                Platform.NEOFORGE -> {
+                    return object : RecipeOutput {
+                        override fun accept(
+                            location: ResourceLocation,
+                            recipe: Recipe<*>,
+                            advancement: AdvancementHolder?
+                        ) {
+                            FabricForgeConditionsMap.addEmptyCondition(recipe,id("vegan_enabled"))
+                            output.accept(location,recipe,advancement)
+                        }
+
+                        override fun advancement(): Advancement.Builder = output.advancement()
+                    }
+                }
+                Platform.COMMON -> {}
+            }
+            return output
+        }
         ShapelessRecipeBuilder.shapeless(RecipeCategory.BREWING, EstrogenItems.SugarGoop.value!!,1)
             .requires(Items.SUGAR,1)
             .requires(Items.BEETROOT,2)
@@ -114,14 +143,17 @@ class EstrogenCraftingRecipes(output: FabricDataOutput, lookup: CompletableFutur
             .unlockedBy(getHasName(Items.SUGAR),has(Items.SUGAR))
             .unlockedBy(getHasName(Items.BEETROOT),has(Items.BEETROOT))
             .unlockedBy(getHasName(Items.WHEAT),has(Items.WHEAT))
-            .save(output)
+            .save(veganConditionAdapter(output))
+
         SpongingRecipeBuilder().setInput(EstrogenFluids.SugarySyrup.get())
             .setOutput(EstrogenFluids.FilteredSugarySyrups[0].get())
-            .save(output)
+            .save(veganConditionAdapter(output))
 
         SpongingRecipeBuilder()
             .setInput(EstrogenFluids.FilteredSugarySyrups[0].get())
             .setOutput(EstrogenFluids.FilteredSugarySyrups[1].get())
-            .save(output)
+            .save(veganConditionAdapter(output))
     }
+
+
 }
